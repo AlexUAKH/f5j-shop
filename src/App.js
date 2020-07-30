@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react"
+import "./App.css"
+import { Redirect, Route, Switch } from "react-router-dom"
+import MainLayout from "./hoc/layout/mainLayout"
+import homePage from "./pages/homePage/homePage"
+import { connect } from "react-redux"
+import AdminLayout from "./hoc/layout/adminLayout"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    render() {
+        let routs = (
+            <Switch>
+                {/* <Route path='/auth' component={ Auth } />
+                <Route path='/quiz/:id' component={ Quiz } />*/ }
+                <Route path='/' component={ homePage } />
+                <Redirect to={ "/" }/>
+            </Switch>
+        )
+        let output = (
+            <MainLayout>
+                { routs }
+            </MainLayout>
+        )
+        if (this.props.role === 'admin') {
+            output = (
+                <AdminLayout>
+                    { routs }
+                </AdminLayout>
+            )
+        }
+        return (
+            <React.Fragment>
+                { output }
+            </React.Fragment>
+        )
+    }
+
 }
 
-export default App;
+function mapStateToProps(state) {
+    return {
+        role: state.auth.role
+    }
+}
+
+export default connect(mapStateToProps)(App)

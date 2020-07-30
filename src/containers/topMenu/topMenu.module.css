@@ -1,0 +1,12 @@
+.topMenu {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    background-color: chartreuse;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 10px;
+}
+.topMenu .icons span {
+    margin: 0 10px;
+}

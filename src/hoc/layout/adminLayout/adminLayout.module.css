@@ -1,0 +1,12 @@
+.adminLayout {
+    background-color: #f01f30;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.adminLayout main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}

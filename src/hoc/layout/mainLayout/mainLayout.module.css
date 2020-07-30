@@ -1,0 +1,12 @@
+.mainLayout {
+    background-color: #61dafb;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainLayout main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
