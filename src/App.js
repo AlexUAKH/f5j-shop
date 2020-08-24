@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import "./App.css"
 import { Redirect, Route, Switch } from "react-router-dom"
-import MainLayout from "./hoc/layout/mainLayout"
+import MainLayout from "./containers/layout/mainLayout"
 import homePage from "./pages/homePage/homePage"
 import { connect } from "react-redux"
-import AdminLayout from "./hoc/layout/adminLayout"
+import AdminLayout from "./containers/layout/adminLayout"
 
 class App extends Component {
     render() {
