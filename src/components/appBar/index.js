@@ -1,2 +1,2 @@
-import AppBar from "./appBar"
-export default AppBar
+import AppMenuBar from "./appBar"
+export default AppMenuBar

@@ -14,6 +14,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle"
 import MailIcon from "@material-ui/icons/Mail"
 import NotificationsIcon from "@material-ui/icons/Notifications"
 import MoreIcon from "@material-ui/icons/MoreVert"
+import SwipeableTemporaryDrawer from "../drawer/drawer"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -83,6 +84,7 @@ export default function AppMenuBar() {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
+    const [openDrawer, setDrawer] = React.useState(false)
 
     const isMenuOpen = Boolean(anchorEl)
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
@@ -160,6 +162,9 @@ export default function AppMenuBar() {
             </MenuItem>
         </Menu>
     )
+    const drawerToggle = () => {
+        setDrawer(!openDrawer)
+    }
 
     return (
         <div className={ classes.grow }>
@@ -170,25 +175,26 @@ export default function AppMenuBar() {
                         className={ classes.menuButton }
                         color="inherit"
                         aria-label="open drawer"
+                        onClick={ drawerToggle }
                     >
                         <MenuIcon/>
                     </IconButton>
                     <Typography className={ classes.title } variant="h6" noWrap>
                         Material-UI
                     </Typography>
-                    {/*<div className={ classes.search }>*/}
-                    {/*    <div className={ classes.searchIcon }>*/}
-                    {/*        <SearchIcon/>*/}
-                    {/*    </div>*/}
-                    {/*    <InputBase*/}
-                    {/*        placeholder="Search…"*/}
-                    {/*        classes={ {*/}
-                    {/*            root: classes.inputRoot,*/}
-                    {/*            input: classes.inputInput*/}
-                    {/*        } }*/}
-                    {/*        inputProps={ { "aria-label": "search" } }*/}
-                    {/*    />*/}
-                    {/*</div>*/}
+                    {/*<div className={ classes.search }>*/ }
+                    {/*    <div className={ classes.searchIcon }>*/ }
+                    {/*        <SearchIcon/>*/ }
+                    {/*    </div>*/ }
+                    {/*    <InputBase*/ }
+                    {/*        placeholder="Search…"*/ }
+                    {/*        classes={ {*/ }
+                    {/*            root: classes.inputRoot,*/ }
+                    {/*            input: classes.inputInput*/ }
+                    {/*        } }*/ }
+                    {/*        inputProps={ { "aria-label": "search" } }*/ }
+                    {/*    />*/ }
+                    {/*</div>*/ }
                     <div className={ classes.grow }/>
                     <div className={ classes.sectionDesktop }>
                         <IconButton aria-label="show 4 new mails" color="inherit">
@@ -227,6 +233,7 @@ export default function AppMenuBar() {
             </AppBar>
             { renderMobileMenu }
             { renderMenu }
+            <SwipeableTemporaryDrawer isOpen={ openDrawer }/>
         </div>
     )
 }
