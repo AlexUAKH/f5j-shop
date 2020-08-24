@@ -1,9 +1,9 @@
 .menuToggle {
     position: fixed;
     top:6px;
-    left: 10px;
-    margin: 0 15px;
-    font-size: 30px;
+    left: 5px;
+    margin: 0 15px 0 5px;
+    font-size: 1.5rem;
     cursor: pointer;
     color: #fff;
     transition: opacity, left .22s ease-in;

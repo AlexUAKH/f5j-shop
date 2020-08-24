@@ -33,8 +33,8 @@ export default class TopMenu extends Component {
                 <div style={{width: '90px'}}> </div>
                 <div>LOGO</div>
                 <div className={classes.icons}>
-                    <span><i className="fa fa-shopping-cart fa-2x" /></span>
-                    <span><i className="fa fa-user-circle fa-2x" /></span>
+                    <span><i className="fa fa-shopping-cart" /></span>
+                    <span><i className="fa fa-user-circle" /></span>
                 </div>
             </div>
         )

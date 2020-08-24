@@ -31,6 +31,7 @@ class App extends Component {
         return (
             <React.Fragment>
                 { output }
+                <span onClick={()=>console.log("dweeew")}>dcsvsfvsffvs</span>
             </React.Fragment>
         )
     }

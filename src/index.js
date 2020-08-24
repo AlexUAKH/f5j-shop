@@ -8,6 +8,7 @@ import rootReducer from "./store/reducers/rootReducer"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import thunk from "redux-thunk"
+import Boundary from "./components/boundary"
 
 const composeEnhancers =
     typeof window === "object" &&
@@ -26,7 +27,9 @@ ReactDOM.render(
   <React.StrictMode>
       <Provider store={ store }>
           <BrowserRouter>
-              <App/>
+              <Boundary>
+                <App/>
+              </Boundary>
           </BrowserRouter>
       </Provider>
   </React.StrictMode>,
