@@ -5,6 +5,7 @@ import MainLayout from "./containers/layout/mainLayout"
 import homePage from "./pages/homePage/homePage"
 import { connect } from "react-redux"
 import AdminLayout from "./containers/layout/adminLayout"
+import AppMenuBar from "./components/appBar"
 
 class App extends Component {
     render() {
@@ -30,6 +31,7 @@ class App extends Component {
         }
         return (
             <React.Fragment>
+                <AppMenuBar />
                 { output }
                 <span onClick={()=>console.log("dweeew")}>dcsvsfvsffvs</span>
             </React.Fragment>
