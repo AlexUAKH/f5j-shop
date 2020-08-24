@@ -1,12 +1,15 @@
 import React, { Component } from "react"
-import "./App.css"
+import { connect } from "react-redux"
+
 import { Redirect, Route, Switch } from "react-router-dom"
-import MainLayout from "./hoc/layout/mainLayout"
+import MainLayout from "./containers/layout/mainLayout"
+import AdminLayout from "./containers/layout/adminLayout"
+import AppMenuBar from "./components/appBar"
 import HomePage from "./pages/homePage/homePage"
 import LoginPage from './pages/loginPage'
 import SignUpPage from './pages/signUpPage'
-import { connect } from "react-redux"
-import AdminLayout from "./hoc/layout/adminLayout"
+
+import "./App.css"
 
 class App extends Component {
     render() {
@@ -34,6 +37,7 @@ class App extends Component {
         }
         return (
             <React.Fragment>
+                <AppMenuBar />
                 { output }
             </React.Fragment>
         )
