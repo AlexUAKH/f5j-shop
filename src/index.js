@@ -1,20 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react"
+import ReactDOM from "react-dom"
+import "./index.css"
+import App from "./App"
+import * as serviceWorker from "./serviceWorker"
 import { applyMiddleware, compose, createStore } from "redux"
 import rootReducer from "./store/reducers/rootReducer"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import thunk from "redux-thunk"
 import Boundary from "./components/boundary"
+import {
+    createMuiTheme,
+    ThemeProvider as MuiThemeProvider
+} from "@material-ui/core/styles"
 
 const composeEnhancers =
     typeof window === "object" &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        }) : compose
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose
 
 const store = createStore(
     rootReducer,
@@ -22,21 +25,28 @@ const store = createStore(
         applyMiddleware(thunk)
     )
 )
+const theme = createMuiTheme({
+    palette: {
+        type: 'light'//"dark"
+    }
+})
 
 ReactDOM.render(
-  <React.StrictMode>
-      <Provider store={ store }>
-          <BrowserRouter>
-              <Boundary>
-                <App/>
-              </Boundary>
-          </BrowserRouter>
-      </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+    <React.StrictMode>
+        <Provider store={ store }>
+            <MuiThemeProvider theme={ theme }>
+                <BrowserRouter>
+                    <Boundary>
+                        <App/>
+                    </Boundary>
+                </BrowserRouter>
+            </MuiThemeProvider>
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById("root")
+)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
