@@ -8,7 +8,7 @@ import AppMenuBar from "./components/appBar"
 import HomePage from "./pages/homePage/homePage"
 import LoginPage from './pages/loginPage'
 import SignUpPage from './pages/signUpPage'
-
+import ProductPage from "./pages/productPage";
 import "./App.css"
 
 class App extends Component {
@@ -16,7 +16,8 @@ class App extends Component {
         let routs = (
             <Switch>
                 <Route path='/login' component={ LoginPage } />
-                <Route path='/sign_up' component={ SignUpPage } />
+                <Route path='/products/:id' component={ ProductPage } />
+                <Route path='/sign-up' component={ SignUpPage } />
                 <Route path='/' component={ HomePage } />
                 <Redirect to={ "/" }/>
             </Switch>
