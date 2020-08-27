@@ -9,14 +9,15 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Menu from "@material-ui/core/Menu"
 import MenuIcon from "@material-ui/icons/Menu"
 import AccountCircle from "@material-ui/icons/AccountCircle"
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart"
 import MailIcon from "@material-ui/icons/Mail"
 import NotificationsIcon from "@material-ui/icons/Notifications"
 import MoreIcon from "@material-ui/icons/MoreVert"
 import SwipeableTemporaryDrawer from "../drawer/drawer"
 import { withStyles } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
-import { Link as RouterLink, NavLink } from "react-router-dom"
-import { Link } from "@material-ui/icons"
+import { Link as RouterLink } from "react-router-dom"
+import Divider from "@material-ui/core/Divider"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -79,7 +80,6 @@ const StyledMenu = withStyles({
         { ...props }
     />
 ))
-const StyledMenuItem = withStyles((theme) => ({}))(MenuItem)
 
 export default function AppMenuBar() {
     const classes = useStyles()
@@ -125,23 +125,19 @@ export default function AppMenuBar() {
             open={ isMenuOpen }
             onClose={ handleMenuClose }
         >
+            <Typography component={'p'}>User name</Typography>
+            <Divider />
             {
                 userMenu.map((menu) => {
                     return (
                         <RouterLink to={ menu.to } key={ menu.id }>
-                        <MenuItem onClick={ handleMenuClose }>
-
+                            <MenuItem onClick={ handleMenuClose }>
                                 { menu.label }
-
-                        </MenuItem></RouterLink>
+                            </MenuItem></RouterLink>
                     )
                 })
             }
 
-            {/*<StyledMenuItem onClick={ handleMenuClose }>
-                <NavLink to={}Profile</StyledMenuItem>
-            <StyledMenuItem onClick={ handleMenuClose }>My account</StyledMenuItem>
-        </StyledMenu>*/ }
         </StyledMenu>
     )
 
@@ -223,7 +219,7 @@ export default function AppMenuBar() {
                         </IconButton>
                         <IconButton aria-label="show 17 new notifications" color="inherit">
                             <Badge badgeContent={ 17 } color="secondary">
-                                <NotificationsIcon/>
+                                <ShoppingCartIcon/>
                             </Badge>
                         </IconButton>
                         <IconButton

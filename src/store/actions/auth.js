@@ -33,7 +33,6 @@ export function auth(email, password, isLigin) {
 
 const sentData = async (url, data, dispatch) => {
     const res = await axios.post(url, data)
-    console.log("res ", res)
     const dt = res.data
     const expirationDate = new Date(new Date().getTime() + dt.expiresIn * 1000)
 
