@@ -1,10 +1,9 @@
 import React from "react"
-import { fade, makeStyles } from "@material-ui/core/styles"
+import { makeStyles } from "@material-ui/core/styles"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
 import Typography from "@material-ui/core/Typography"
-import InputBase from "@material-ui/core/InputBase"
 import Badge from "@material-ui/core/Badge"
 import MenuItem from "@material-ui/core/MenuItem"
 import Menu from "@material-ui/core/Menu"
@@ -14,6 +13,8 @@ import MailIcon from "@material-ui/icons/Mail"
 import NotificationsIcon from "@material-ui/icons/Notifications"
 import MoreIcon from "@material-ui/icons/MoreVert"
 import SwipeableTemporaryDrawer from "../drawer/drawer"
+import { withStyles } from "@material-ui/styles"
+import CssBaseline from "@material-ui/core/CssBaseline"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2)
     },
     title: {
+        display: "block"
         /*display: "none",
         [theme.breakpoints.up("sm")]: {
             display: "block"
@@ -55,6 +57,29 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+const StyledMenu = withStyles({
+    paper: {
+        border: "1px solid #d3d4d5"
+    }
+})((props) => (
+    <Menu
+        elevation={ 0 }
+        getContentAnchorEl={ null }
+        anchorOrigin={ {
+            vertical: "bottom",
+            horizontal: "right"
+        } }
+        transformOrigin={ {
+            vertical: "top",
+            horizontal: "right"
+        } }
+        { ...props }
+    />
+))
+const StyledMenuItem = withStyles((theme) => ({
+
+}))(MenuItem)
+
 export default function AppMenuBar() {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -83,18 +108,18 @@ export default function AppMenuBar() {
 
     const menuId = "primary-search-account-menu"
     const renderMenu = (
-        <Menu
+        <StyledMenu
             anchorEl={ anchorEl }
-            anchorOrigin={ { vertical: "top", horizontal: "right" } }
+            anchorOrigin={ { vertical: "bottom", horizontal: "right" } }
             id={ menuId }
             keepMounted
             transformOrigin={ { vertical: "top", horizontal: "right" } }
             open={ isMenuOpen }
             onClose={ handleMenuClose }
         >
-            <MenuItem onClick={ handleMenuClose }>Profile</MenuItem>
-            <MenuItem onClick={ handleMenuClose }>My account</MenuItem>
-        </Menu>
+            <StyledMenuItem onClick={ handleMenuClose }>Profile</StyledMenuItem>
+            <StyledMenuItem onClick={ handleMenuClose }>My account</StyledMenuItem>
+        </StyledMenu>
     )
 
     const mobileMenuId = "primary-search-account-menu-mobile"
@@ -143,6 +168,7 @@ export default function AppMenuBar() {
 
     return (
         <div className={ classes.grow }>
+            <CssBaseline />
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
@@ -195,7 +221,10 @@ export default function AppMenuBar() {
             </AppBar>
             { renderMobileMenu }
             { renderMenu }
-            <SwipeableTemporaryDrawer isOpen={ openDrawer }/>
+            <SwipeableTemporaryDrawer
+                isOpen={ openDrawer }
+                isClose={ drawerToggle }
+            />
         </div>
     )
 }
