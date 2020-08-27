@@ -3,42 +3,32 @@ import { connect } from "react-redux"
 
 import { Redirect, Route, Switch } from "react-router-dom"
 import MainLayout from "./containers/layout/mainLayout"
-import AdminLayout from "./containers/layout/adminLayout"
 import AppMenuBar from "./components/appBar"
 import HomePage from "./pages/homePage/homePage"
-import LoginPage from './pages/loginPage'
-import SignUpPage from './pages/signUpPage'
+import LoginPage from "./pages/loginPage"
+import SignUpPage from "./pages/signUpPage"
 
 import "./App.css"
+import AdminPage from "./pages/adminPage"
 
 class App extends Component {
     render() {
         let routs = (
             <Switch>
-                <Route path='/login' component={ LoginPage } />
-                <Route path='/sign_up' component={ SignUpPage } />
-                <Route path='/' component={ HomePage } />
+                <Route path='/login' component={ LoginPage }/>
+                <Route path='/sign_up' component={ SignUpPage }/>
+                <Route path='/admin' component={ AdminPage }/>
+                <Route path='/' component={ HomePage }/>
                 <Redirect to={ "/" }/>
             </Switch>
         )
-        let output
-        if (this.props.role === 'admin') {
-            output = (
-                <AdminLayout>
-                    { routs }
-                </AdminLayout>
-            )
-        }else{
-            output = (
-                <MainLayout>
-                    { routs }
-                </MainLayout>
-            )
-        }
+
         return (
             <React.Fragment>
-                <AppMenuBar />
-                { output }
+                <MainLayout>
+                    <AppMenuBar/>
+                    { routs }
+                </MainLayout>
             </React.Fragment>
         )
     }
@@ -47,7 +37,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
     return {
-        role: state.auth.role
+        role: state.auth.role //'admin'//
     }
 }
 

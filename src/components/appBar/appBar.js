@@ -15,6 +15,8 @@ import MoreIcon from "@material-ui/icons/MoreVert"
 import SwipeableTemporaryDrawer from "../drawer/drawer"
 import { withStyles } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
+import { Link as RouterLink, NavLink } from "react-router-dom"
+import { Link } from "@material-ui/icons"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -24,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(2)
     },
     title: {
-        display: "block"
+        display: "block",
+        color: "white"
         /*display: "none",
         [theme.breakpoints.up("sm")]: {
             display: "block"
@@ -76,9 +79,7 @@ const StyledMenu = withStyles({
         { ...props }
     />
 ))
-const StyledMenuItem = withStyles((theme) => ({
-
-}))(MenuItem)
+const StyledMenuItem = withStyles((theme) => ({}))(MenuItem)
 
 export default function AppMenuBar() {
     const classes = useStyles()
@@ -107,6 +108,13 @@ export default function AppMenuBar() {
     }
 
     const menuId = "primary-search-account-menu"
+    const userMenu = [
+        { label: "Log In", to: "/login", auth: false, id: 1 },
+        { label: "Profile", to: "/profile/id", auth: true, id: 2 },
+        { label: "Orders", to: "/orders/id", auth: true, id: 3 },
+        { label: "Administration", to: "/admin", auth: true, id: 4 },
+        { label: "Log Out", to: "/logout", auth: true, id: 5 }
+    ]
     const renderMenu = (
         <StyledMenu
             anchorEl={ anchorEl }
@@ -117,8 +125,23 @@ export default function AppMenuBar() {
             open={ isMenuOpen }
             onClose={ handleMenuClose }
         >
-            <StyledMenuItem onClick={ handleMenuClose }>Profile</StyledMenuItem>
+            {
+                userMenu.map((menu) => {
+                    return (
+                        <RouterLink to={ menu.to } key={ menu.id }>
+                        <MenuItem onClick={ handleMenuClose }>
+
+                                { menu.label }
+
+                        </MenuItem></RouterLink>
+                    )
+                })
+            }
+
+            {/*<StyledMenuItem onClick={ handleMenuClose }>
+                <NavLink to={}Profile</StyledMenuItem>
             <StyledMenuItem onClick={ handleMenuClose }>My account</StyledMenuItem>
+        </StyledMenu>*/ }
         </StyledMenu>
     )
 
@@ -167,8 +190,8 @@ export default function AppMenuBar() {
     }
 
     return (
-        <div className={ classes.grow }>
-            <CssBaseline />
+        <div>
+            <CssBaseline/>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
@@ -180,9 +203,17 @@ export default function AppMenuBar() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography className={ classes.title } variant="h6" noWrap>
-                        Material-UI
-                    </Typography>
+
+                    <RouterLink
+                        style={ { textDecoration: "none" } }
+                        variant="body2"
+                        to="/"
+                    >
+                        <Typography className={ classes.title } variant="h6" noWrap>
+                            Material-UI
+                        </Typography>
+                    </RouterLink>
+
                     <div className={ classes.grow }/>
                     <div className={ classes.sectionDesktop }>
                         <IconButton aria-label="show 4 new mails" color="inherit">

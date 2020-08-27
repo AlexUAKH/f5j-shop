@@ -7,7 +7,7 @@ export default class Boundary extends Component {
     }
     componentDidCatch(error, errorInfo) {
         this.setState({
-            error: errorInfo
+            error: error
         })
     }
 

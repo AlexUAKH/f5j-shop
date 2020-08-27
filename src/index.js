@@ -13,6 +13,7 @@ import {
     createMuiTheme,
     ThemeProvider as MuiThemeProvider
 } from "@material-ui/core/styles"
+import CssBaseline from "@material-ui/core/CssBaseline"
 
 const composeEnhancers =
     typeof window === "object" &&
@@ -35,6 +36,7 @@ ReactDOM.render(
     <React.StrictMode>
         <Provider store={ store }>
             <MuiThemeProvider theme={ theme }>
+                <CssBaseline/>
                 <BrowserRouter>
                     <Boundary>
                         <App/>
