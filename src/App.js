@@ -5,9 +5,9 @@ import { Redirect, Route, Switch } from "react-router-dom"
 import MainLayout from "./containers/layout/mainLayout"
 import AppMenuBar from "./components/appBar"
 import HomePage from "./pages/homePage/homePage"
-import LoginPage from "./pages/loginPage"
-import SignUpPage from "./pages/signUpPage"
-
+import LoginPage from './pages/loginPage'
+import SignUpPage from './pages/signUpPage'
+import ProductPage from "./pages/productPage"
 import "./App.css"
 import AdminPage from "./pages/adminPage"
 
@@ -18,7 +18,8 @@ class App extends Component {
                 <Route path='/login' component={ LoginPage }/>
                 <Route path='/sign_up' component={ SignUpPage }/>
                 <Route path='/admin' component={ AdminPage }/>
-                <Route path='/' component={ HomePage }/>
+                <Route path='/products/:id' component={ ProductPage } />
+                <Route path='/' component={ HomePage } />
                 <Redirect to={ "/" }/>
             </Switch>
         )
