@@ -56,7 +56,6 @@ export default function Review(props) {
                         </Typography>
                     </div>
                 </Typography>
-
                 <Box component="fieldset" className={classes.rating}  borderColor="transparent">
                     <Rating  name="disabled" precision={0.5} defaultValue={0} value={rating} size="small" readOnly/>
                 </Box>
@@ -65,6 +64,5 @@ export default function Review(props) {
                 { text }
             </Typography>
         </Paper>
-
     )
 }
