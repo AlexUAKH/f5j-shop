@@ -1,15 +1,16 @@
 import React, { Component } from "react"
-import { connect } from "react-redux"
+import { connect, Provider } from "react-redux"
 
 import { Redirect, Route, Switch } from "react-router-dom"
 import MainLayout from "./containers/layout/mainLayout"
 import AppMenuBar from "./components/appBar"
 import HomePage from "./pages/homePage/homePage"
-import LoginPage from './pages/loginPage'
-import SignUpPage from './pages/signUpPage'
+import LoginPage from "./pages/loginPage"
+import SignUpPage from "./pages/signUpPage"
 import ProductPage from "./pages/productPage"
 import "./App.css"
 import AdminPage from "./pages/adminPage"
+import { createMuiTheme, ThemeProvider as MuiThemeProvider } from "@material-ui/core"
 
 class App extends Component {
     render() {
@@ -18,18 +19,26 @@ class App extends Component {
                 <Route path='/login' component={ LoginPage }/>
                 <Route path='/sign_up' component={ SignUpPage }/>
                 <Route path='/admin' component={ AdminPage }/>
-                <Route path='/products/:id' component={ ProductPage } />
-                <Route path='/' component={ HomePage } />
+                <Route path='/products/:id' component={ ProductPage }/>
+                <Route path='/' component={ HomePage }/>
                 <Redirect to={ "/" }/>
             </Switch>
         )
 
+        const theme = createMuiTheme({
+            palette: {
+                type: this.props.theme//"light""dark"
+            }
+        })
+
         return (
             <React.Fragment>
-                <MainLayout>
-                    <AppMenuBar/>
-                    { routs }
-                </MainLayout>
+                <MuiThemeProvider theme={ theme }>
+                    <MainLayout>
+                        <AppMenuBar/>
+                        { routs }
+                    </MainLayout>
+                </MuiThemeProvider>
             </React.Fragment>
         )
     }
@@ -38,7 +47,8 @@ class App extends Component {
 
 function mapStateToProps(state) {
     return {
-        role: state.auth.role //'admin'//
+        role: state.auth.role, //'admin'//
+        theme: state.theme.type
     }
 }
 

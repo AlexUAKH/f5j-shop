@@ -26,23 +26,16 @@ const store = createStore(
         applyMiddleware(thunk)
     )
 )
-const theme = createMuiTheme({
-    palette: {
-        type: 'light'//"dark"
-    }
-})
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={ store }>
-            <MuiThemeProvider theme={ theme }>
-                <CssBaseline/>
-                <BrowserRouter>
-                    <Boundary>
-                        <App/>
-                    </Boundary>
-                </BrowserRouter>
-            </MuiThemeProvider>
+            <CssBaseline/>
+            <BrowserRouter>
+                <Boundary>
+                    <App/>
+                </Boundary>
+            </BrowserRouter>
         </Provider>
     </React.StrictMode>,
     document.getElementById("root")

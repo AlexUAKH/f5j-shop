@@ -1,3 +1,4 @@
+export const THEME_CHANGE = "THEME_CHANGE"
 export const AUTH_SUCCESS = "AUTH_SUCCESS"
 export const AUTH_LOGOUT = "AUTH_LOGOUT"
 export const AUTH_SIGNUP_SUCCESS = "AUTH_SIGNUP_SUCCESS"

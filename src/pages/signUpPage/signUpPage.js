@@ -18,6 +18,7 @@ import { isFormValidCheck, makeNewControl } from "../../form/formFrameWork"
 import { connect } from "react-redux"
 import { signUp } from "../../store/actions/auth"
 import { Redirect } from "react-router"
+import Snack from "../../components/snackBar"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -43,6 +44,7 @@ const initialState = {
     isFormValid: false,
     showPassword: false,
     registered: false,
+    snack: false,
     formControls: {
         firstName: {
             value: "",
@@ -101,17 +103,26 @@ const SignUp = (props) => {
         setState({ ...state, formControls, isFormValid })
     }
 
-    const registerHandler = () => {
-        props.auth(
+    const registerHandler = async () => {
+        await props.auth(
             state.formControls.mail.value,
             state.formControls.password.value,
             state.formControls.firstName.value,
             state.formControls.lastName.value
-        )
-        setState({
-            ...initialState,
-            registered: true
+        ).then(() => {
+            setState({
+                ...initialState,
+
+                snack: true
+            })
+            setTimeout(() => {
+                setState({
+                    ...initialState,
+                    registered: true
+                })
+            }, 3000)
         })
+
     }
 
     const onSubmitHandler = (e) => {
@@ -121,119 +132,127 @@ const SignUp = (props) => {
     const { firstName, lastName, mail, password } = state.formControls
 
     if (state.registered) {
-        return <Redirect to="/" />
-    } else return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <div className={ classes.paper }>
-                <Avatar className={ classes.avatar }>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign up
-                </Typography>
-                <form className={ classes.form } noValidate onSubmit={ onSubmitHandler }>
-                    <Grid container spacing={ 2 }>
-                        <Grid item xs={ 12 } sm={ 6 }>
-                            <TextField
-                                autoComplete="fname"
-                                name="firstName"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="firstName"
-                                label={ state.formControls.firstName.label }
-                                autoFocus
-                                value={ firstName.value }
-                                onChange={ handleInputChange("firstName") }
-                            />
+        return (
+            <Redirect to="/"/>
+        )
+    } else if (state.snack) {
+        return (
+            <Snack message="Registration is success"/>
+        )
+    } else {
+        return (
+            <Container component="main" maxWidth="xs">
+                <CssBaseline/>
+                <div className={ classes.paper }>
+                    <Avatar className={ classes.avatar }>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign up
+                    </Typography>
+                    <form className={ classes.form } noValidate onSubmit={ onSubmitHandler }>
+                        <Grid container spacing={ 2 }>
+                            <Grid item xs={ 12 } sm={ 6 }>
+                                <TextField
+                                    autoComplete="fname"
+                                    name="firstName"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label={ state.formControls.firstName.label }
+                                    autoFocus
+                                    value={ firstName.value }
+                                    onChange={ handleInputChange("firstName") }
+                                />
+                            </Grid>
+                            <Grid item xs={ 12 } sm={ 6 }>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label={ lastName.label }
+                                    name="lastName"
+                                    autoComplete="lname"
+                                    value={ lastName.value }
+                                    onChange={ handleInputChange("lastName") }
+                                />
+                            </Grid>
+                            <Grid item xs={ 12 }>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label={ mail.label }
+                                    name="email"
+                                    autoComplete="email"
+                                    error={ !mail.valid && mail.touched }
+                                    value={ mail.value }
+                                    helperText={
+                                        (!mail.valid && mail.touched)
+                                            ? mail.errorMessage
+                                            : "" }
+                                    onChange={ handleInputChange("mail") }
+                                />
+                            </Grid>
+                            <Grid item xs={ 12 }>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label={ password.label }
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    onChange={ handleInputChange("password") }
+                                    error={ !password.valid && password.touched }
+                                    helperText={
+                                        (!password.valid && password.touched)
+                                            ? password.errorMessage
+                                            : "" }
+                                />
+                            </Grid>
+                            <Grid item xs={ 12 }>
+                                <FormControlLabel
+                                    control={ <Checkbox value="allowExtraEmails" color="primary"/> }
+                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={ 12 } sm={ 6 }>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label={ lastName.label }
-                                name="lastName"
-                                autoComplete="lname"
-                                value={ lastName.value }
-                                onChange={ handleInputChange("lastName") }
-                            />
-                        </Grid>
-                        <Grid item xs={ 12 }>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label={ mail.label }
-                                name="email"
-                                autoComplete="email"
-                                error={ !mail.valid && mail.touched }
-                                value={ mail.value }
-                                helperText={
-                                    (!mail.valid && mail.touched)
-                                        ? mail.errorMessage
-                                        : "" }
-                                onChange={ handleInputChange("mail") }
-                            />
-                        </Grid>
-                        <Grid item xs={ 12 }>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label={ password.label }
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                onChange={ handleInputChange("password") }
-                                error={ !password.valid && password.touched }
-                                helperText={
-                                    (!password.valid && password.touched)
-                                        ? password.errorMessage
-                                        : "" }
-                            />
-                        </Grid>
-                        <Grid item xs={ 12 }>
-                            <FormControlLabel
-                                control={ <Checkbox value="allowExtraEmails" color="primary"/> }
-                                label="I want to receive inspiration, marketing promotions and updates via email."
-                            />
-                        </Grid>
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={ classes.submit }
-                        disabled={ !state.isFormValid }
-                        onClick={ registerHandler }
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={ classes.submit }
+                            disabled={ !state.isFormValid }
+                            onClick={ registerHandler }
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justify="flex-end">
 
-                        <Grid item>
-                            <Link
-                                component={ RouterLink }
-                                variant="body2"
-                                to="/login"
-                            >
-                                Already have an account? Sign in
-                            </Link>
+                            <Grid item>
+                                <Link
+                                    component={ RouterLink }
+                                    variant="body2"
+                                    to="/login"
+                                >
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </form>
-            </div>
-            <Box mt={ 5 }>
-                <Copyright/>
-            </Box>
-        </Container>
-    )
+                    </form>
+                </div>
+                <Box mt={ 5 }>
+                    <Copyright/>
+                </Box>
+            </Container>
+        )
+    }
 }
 
 function mapDispatchToProps(dispatch) {

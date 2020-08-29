@@ -10,6 +10,7 @@ import Menu from "@material-ui/core/Menu"
 import MenuIcon from "@material-ui/icons/Menu"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart"
+import Brightness6Icon from '@material-ui/icons/Brightness6';
 import MailIcon from "@material-ui/icons/Mail"
 import NotificationsIcon from "@material-ui/icons/Notifications"
 import MoreIcon from "@material-ui/icons/MoreVert"
@@ -18,6 +19,8 @@ import { withStyles } from "@material-ui/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import { Link as RouterLink } from "react-router-dom"
 import Divider from "@material-ui/core/Divider"
+import { connect } from "react-redux"
+import { changeTheme } from "../../store/actions/theme"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -81,7 +84,7 @@ const StyledMenu = withStyles({
     />
 ))
 
-export default function AppMenuBar() {
+const AppMenuBar = (props) => {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
@@ -125,8 +128,8 @@ export default function AppMenuBar() {
             open={ isMenuOpen }
             onClose={ handleMenuClose }
         >
-            <Typography component={'p'}>User name</Typography>
-            <Divider />
+            <Typography component={ "p" }>User name</Typography>
+            <Divider/>
             {
                 userMenu.map((menu) => {
                     return (
@@ -212,10 +215,8 @@ export default function AppMenuBar() {
 
                     <div className={ classes.grow }/>
                     <div className={ classes.sectionDesktop }>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={ 4 } color="secondary">
-                                <MailIcon/>
-                            </Badge>
+                        <IconButton aria-label="show 4 new mails" color="inherit" onClick={props.themeChangeHandler}>
+                            <Brightness6Icon />
                         </IconButton>
                         <IconButton aria-label="show 17 new notifications" color="inherit">
                             <Badge badgeContent={ 17 } color="secondary">
@@ -255,3 +256,11 @@ export default function AppMenuBar() {
         </div>
     )
 }
+
+function mapDispathToProps(dispatch) {
+    return{
+        themeChangeHandler: () => dispatch(changeTheme())
+    }
+}
+
+export default connect(null, mapDispathToProps)(AppMenuBar)
