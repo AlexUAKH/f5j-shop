@@ -40,20 +40,18 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductPage = (props) => {
     const classes = useStyles();
-    const theme = useTheme();
+
     return(
-        <React.Fragment>
-            <div className={classes.root}>
-                <Typography variant="h4" component="h1" gutterBottom className={classes.title}>Title product</Typography>
-                <TheCarousel className={classes.carousel}/>
-                <ButtonsRow
-                    className={classes.btnRow}
-                    left={<Button variant="contained" color="primary" onClick={() => console.log('Buy now')}>Buy now</Button>}
-                    right={<Button variant="contained"  onClick={() => console.log('Add to cart')}>Add to cart</Button>}
-                />
-                <TheTabs {...mockTabsProps}/>
-            </div>
-        </React.Fragment>
+        <div className={classes.root}>
+            <Typography variant="h4" component="h1" gutterBottom className={classes.title}>Title product</Typography>
+            <TheCarousel className={classes.carousel}/>
+            <ButtonsRow
+                className={classes.btnRow}
+                left={<Button variant="contained" color="primary" onClick={() => console.log('Buy now')}>Buy now</Button>}
+                right={<Button variant="contained"  onClick={() => console.log('Add to cart')}>Add to cart</Button>}
+            />
+            <TheTabs {...mockTabsProps}/>
+        </div>
     )
 }
 

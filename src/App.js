@@ -8,9 +8,11 @@ import HomePage from "./pages/homePage/homePage"
 import LoginPage from "./pages/loginPage"
 import SignUpPage from "./pages/signUpPage"
 import ProductPage from "./pages/productPage"
-import "./App.css"
 import AdminPage from "./pages/adminPage"
+import CartPage from "./pages/cartPage";
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from "@material-ui/core"
+
+import "./App.css"
 
 class App extends Component {
     render() {
@@ -19,6 +21,7 @@ class App extends Component {
                 <Route path='/login' component={ LoginPage }/>
                 <Route path='/sign_up' component={ SignUpPage }/>
                 <Route path='/admin' component={ AdminPage }/>
+                <Route path='/cart' component={ CartPage }/>
                 <Route path='/products/:id' component={ ProductPage }/>
                 <Route path='/' component={ HomePage }/>
                 <Redirect to={ "/" }/>
