@@ -10,7 +10,7 @@ import Menu from "@material-ui/core/Menu"
 import MenuIcon from "@material-ui/icons/Menu"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart"
-import Brightness6Icon from '@material-ui/icons/Brightness6';
+import Brightness6Icon from "@material-ui/icons/Brightness6"
 import MailIcon from "@material-ui/icons/Mail"
 import NotificationsIcon from "@material-ui/icons/Notifications"
 import MoreIcon from "@material-ui/icons/MoreVert"
@@ -215,8 +215,8 @@ const AppMenuBar = (props) => {
 
                     <div className={ classes.grow }/>
                     <div className={ classes.sectionDesktop }>
-                        <IconButton aria-label="show 4 new mails" color="inherit" onClick={props.themeChangeHandler}>
-                            <Brightness6Icon />
+                        <IconButton aria-label="light/dark mode" color="inherit" onClick={ props.themeChangeHandler }>
+                            <Brightness6Icon/>
                         </IconButton>
                         <IconButton aria-label="show 17 new notifications" color="inherit">
                             <Badge badgeContent={ 17 } color="secondary">
@@ -258,7 +258,7 @@ const AppMenuBar = (props) => {
 }
 
 function mapDispathToProps(dispatch) {
-    return{
+    return {
         themeChangeHandler: () => dispatch(changeTheme())
     }
 }

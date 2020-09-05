@@ -3,8 +3,6 @@ import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import TextField from "@material-ui/core/TextField"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Checkbox from "@material-ui/core/Checkbox"
 import Link from "@material-ui/core/Link"
 import Grid from "@material-ui/core/Grid"
 import Box from "@material-ui/core/Box"
@@ -15,9 +13,12 @@ import Container from "@material-ui/core/Container"
 import InputAdornment from "@material-ui/core/InputAdornment"
 import IconButton from "@material-ui/core/IconButton"
 import { Visibility, VisibilityOff } from "@material-ui/icons"
-import { isFormValidCheck, makeNewControl, validateControl } from "../../form/formFrameWork"
+import { isFormValidCheck, makeNewControl } from "../../form/formFrameWork"
 import Copyright from "../../components/copyright"
-import { Link as RouterLink } from "react-router-dom"
+import { Link as RouterLink, Redirect } from "react-router-dom"
+import { auth } from "../../store/actions/auth"
+import { connect } from "react-redux"
+import Snack from "../../components/snackBar"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,42 +39,47 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2)
     },
     valid: {
-        color: theme.palette.success
+        backgroundColor: theme.palette.success
     }
 }))
 
-export default function SignIn() {
-    const classes = useStyles()
-    const [state, setState] = useState({
-        isFormValid: false,
-        showPassword: false,
-        formControls: {
-            mail: {
-                value: "",
-                type: "email",
-                label: "Email Address",
-                errorMessage: "Enter correct Email",
-                valid: false,
-                touched: false,
-                validation: {
-                    required: true,
-                    email: true
-                }
-            },
-            password: {
-                value: "",
-                type: "password",
-                label: "Password",
-                errorMessage: "Min length 6 symbols",
-                valid: false,
-                touched: false,
-                validation: {
-                    required: true,
-                    minLength: 6
-                }
+const initialState = {
+    isFormValid: false,
+    showPassword: false,
+    authSuccess: false,
+    snack: false,
+    message: null,
+    formControls: {
+        mail: {
+            value: "",
+            type: "email",
+            label: "Email Address",
+            errorMessage: "Enter correct Email",
+            valid: false,
+            touched: false,
+            validation: {
+                required: true,
+                email: true
+            }
+        },
+        password: {
+            value: "",
+            type: "password",
+            label: "Password",
+            errorMessage: "Min length 6 symbols",
+            valid: false,
+            touched: false,
+            validation: {
+                required: true,
+                minLength: 6
             }
         }
-    })
+    }
+}
+
+const SignIn = (props) => {
+    const classes = useStyles()
+    const [state, setState] = useState(initialState)
     const handleClickShowPassword = () => {
         setState({
             ...state,
@@ -89,103 +95,161 @@ export default function SignIn() {
         const formControls = makeNewControl(state, controlName, e)
         const isFormValid = isFormValidCheck(formControls)
         setState({ ...state, formControls, isFormValid })
-        console.log("state: ", formControls)
+    }
+
+    const authHandler = async (isLogin) => {
+        await props.auth(
+            state.formControls.mail.value,
+            state.formControls.password.value,
+            isLogin
+        ).then(() => {
+            setState({
+                ...initialState,
+                message: isLogin ? "Login success" : "Registration success",
+                snack: true
+            })
+            setTimeout(() => {
+                setState({
+                    ...initialState,
+                    authSuccess: true
+                })
+            }, 3000)
+        })
+
     }
 
     const { mail } = state.formControls
     const { password } = state.formControls
 
-    return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <div className={ classes.paper }>
-                <Avatar className={ classes.avatar }>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <form className={ classes.form } noValidate>
-                    <TextField
-                        error={ !mail.valid && mail.touched }
-                        value={ mail.value }
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label={ mail.label }
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        className={ classes.valid }
-                        helperText={
-                            (!mail.valid && mail.touched)
-                                ? mail.errorMessage
-                                : "" }
-                        onChange={ handleInputChange("mail") }
-                    />
-                    <TextField
-                        variant="outlined"
-                        value={ password.value }
-                        onChange={ handleInputChange("password") }
-                        error={ !password.valid && password.touched }
-                        helperText={
-                            (!password.valid && password.touched)
-                                ? password.errorMessage
-                                : "" }
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label={ password.label }
-                        type={ state.showPassword ? "text" : "password" }
-                        id="password"
-                        autoComplete="current-password"
-                        InputProps={ {
-                            endAdornment:
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={ handleClickShowPassword }
-                                        onMouseDown={ handleMouseDownPassword }
-                                    >
-                                        { state.showPassword ? <Visibility/> : <VisibilityOff/> }
-                                    </IconButton>
-                                </InputAdornment>
-                        } }
-                    />
-                    <FormControlLabel
-                        control={ <Checkbox value="remember" color="primary"/> }
-                        label="Remember me"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={ classes.submit }
-                        disabled={ !state.isFormValid }
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs >
-                            <Link component={RouterLink} to="" variant="body2">
-                                Forgot password?
-                            </Link>
+    if (state.authSuccess) {
+        return (
+            <Redirect to="/"/>
+        )
+    } else if (state.snack) {
+        return (
+            <Snack message={ this.state.message }/>
+        )
+    } else {
+        return (
+            <Container component="main" maxWidth="xs">
+                <CssBaseline/>
+                <div className={ classes.paper }>
+                    <Avatar className={ classes.avatar }>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <form className={ classes.form } noValidate>
+                        <TextField
+                            error={ !mail.valid && mail.touched }
+                            value={ mail.value }
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label={ mail.label }
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                            className={ classes.valid }
+                            helperText={
+                                (!mail.valid && mail.touched)
+                                    ? mail.errorMessage
+                                    : "" }
+                            onChange={ handleInputChange("mail") }
+                        />
+                        <TextField
+                            variant="outlined"
+                            value={ password.value }
+                            onChange={ handleInputChange("password") }
+                            error={ !password.valid && password.touched }
+                            helperText={
+                                (!password.valid && password.touched)
+                                    ? password.errorMessage
+                                    : "" }
+                            margin="normal"
+                            required
+                            className={ classes.valid }
+                            fullWidth
+                            name="password"
+                            label={ password.label }
+                            type={ state.showPassword ? "text" : "password" }
+                            id="password"
+                            autoComplete="current-password"
+                            InputProps={ {
+                                endAdornment:
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={ handleClickShowPassword }
+                                            onMouseDown={ handleMouseDownPassword }
+                                        >
+                                            { state.showPassword ? <Visibility/> : <VisibilityOff/> }
+                                        </IconButton>
+                                    </InputAdornment>
+                            } }
+                        />
+                        {/*<FormControlLabel*/ }
+                        {/*    control={ <Checkbox value="remember" color="primary"/> }*/ }
+                        {/*    label="Remember me"*/ }
+                        {/*/>*/ }
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={ classes.submit }
+                            disabled={ !state.isFormValid }
+                            onClick={ () => authHandler(true) }
+                        >
+                            Login
+                        </Button>
+                        <Typography component="h4" variant="body2" align="center">
+                            or
+                        </Typography>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="secondary"
+                            className={ classes.submit }
+                            disabled={ !state.isFormValid }
+                            onClick={ () => authHandler(false) }
+                        >
+                            Register
+                        </Button>
+                        <Grid container>
+                            <Grid item xs>
+                                {/*<Link component={ RouterLink } to="" variant="body2">*/ }
+                                {/*    Forgot password?*/ }
+                                {/*</Link>*/ }
+                            </Grid>
+                            <Grid item>
+                                {/*<Link component={RouterLink} to="/sign_up" variant="body2">*/ }
+                                {/*    { "Don't have an account? Sign Up" }*/ }
+                                {/*</Link>*/ }
+                                <Link component={ RouterLink } to="/" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Link component={RouterLink} to="/sign_up" variant="body2">
-                                { "Don't have an account? Sign Up" }
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
-            </div>
-            <Box mt={ 8 }>
-                <Copyright/>
-            </Box>
-        </Container>
-    )
+                    </form>
+                </div>
+                <Box mt={ 8 }>
+                    <Copyright/>
+                </Box>
+            </Container>
+        )
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return {
+        auth: (email, password, isLogin) => dispatch(auth(email, password, isLogin))
+
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SignIn)

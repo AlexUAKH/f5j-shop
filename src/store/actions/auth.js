@@ -1,47 +1,42 @@
 import axios from "../../utilites/axias/axias-sh"
-import { AUTH_LOGOUT, AUTH_SIGNUP_SUCCESS, AUTH_SUCCESS } from "./acionsType"
+import { AUTH_ERROR, AUTH_LOGOUT, AUTH_REGISTER_SUCCESS, AUTH_SIGNUP_SUCCESS, AUTH_SUCCESS } from "./acionsType"
 
-export function signUp(email, password, fName, lName) {
+export function auth(email, password, isLogin) {
     return async dispatch => {
         const data = {
             email,
             password,
             returnSecureToken: true
         }
-        let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDrxMt8bq9uRddROkQQb8jFfDibYjbdgm8"
-        console.log("data", data)
-        sentData(url, data, dispatch)
-            .then(
-                () => {
-                    console.log("Success")
-                })
-            .catch(console.log("fail"))
-    }
-}
-
-export function auth(email, password, isLigin) {
-    return dispatch => {
-        const data = {
-            email,
-            password,
-            returnSecureToken: true
+        let url
+        if (isLogin) {
+            url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDrxMt8bq9uRddROkQQb8jFfDibYjbdgm8"
+        } else {
+            url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDrxMt8bq9uRddROkQQb8jFfDibYjbdgm8"
         }
-        const url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDrxMt8bq9uRddROkQQb8jFfDibYjbdgm8"
-        sentData(url, data, dispatch)
+        console.log("data", data)
+
+        const res = await axios.post(url, data)
+            .then(() => {
+                    const dt = res.data
+                    const expirationDate = new Date(new Date().getTime() + dt.expiresIn * 1000)
+
+                    localStorage.setItem("token", dt.idToken)
+                    localStorage.setItem("userId", dt.localId)
+                    localStorage.setItem("expirationDate", expirationDate)
+
+                    if (isLogin) {
+                        dispatch(authSuccess(dt.idToken))
+                    } else {
+                        dispatch(registerSuccess(dt.idToken))
+                    }
+                    dispatch(autoLogout(dt.expiresIn))
+                }
+            )
+            .catch(e => {
+                dispatch(authError(e))
+            })
     }
-}
-
-const sentData = async (url, data, dispatch) => {
-    const res = await axios.post(url, data)
-    const dt = res.data
-    const expirationDate = new Date(new Date().getTime() + dt.expiresIn * 1000)
-
-    localStorage.setItem("token", dt.idToken)
-    localStorage.setItem("userId", dt.localId)
-    localStorage.setItem("expirationDate", expirationDate)
-
-    dispatch(authSuccess(dt.idToken))
-    dispatch(autoLogout(dt.expiresIn))
 }
 
 export function autoLogout(time) {
@@ -66,6 +61,20 @@ export function authSuccess(token) {
     return {
         type: AUTH_SUCCESS,
         token
+    }
+}
+
+export function registerSuccess(token) {
+    return {
+        type: AUTH_REGISTER_SUCCESS,
+        token
+    }
+}
+
+export function authError(err) {
+    return {
+        type: AUTH_ERROR,
+        err
     }
 }
 

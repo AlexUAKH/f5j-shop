@@ -50,13 +50,13 @@ export default function MediaControlCard(props) {
                 title="Live from space album cover"
             />
             <CardContent className={classes.productData}>
-                <div style={{ 'text-align': 'start'}}>
+                <div style={{ 'textAlign': 'start'}}>
                     <Typography variant="button">{ name }</Typography>
                     <Typography className={ classes.date } variant="overline" display="block">
                         { category }
                     </Typography>
                 </div>
-                <div style={{ 'text-align': 'end'}}>
+                <div style={{ 'textAlign': 'end'}}>
                     <Typography className={classes.count} variant="button">
                         Count: { count }
                         <ButtonGroup

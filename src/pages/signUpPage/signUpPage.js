@@ -16,7 +16,7 @@ import Copyright from "../../components/copyright"
 import { Link as RouterLink } from "react-router-dom"
 import { isFormValidCheck, makeNewControl } from "../../form/formFrameWork"
 import { connect } from "react-redux"
-import { signUp } from "../../store/actions/auth"
+import { auth } from "../../store/actions/auth"
 import { Redirect } from "react-router"
 import Snack from "../../components/snackBar"
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const initialState = {
     isFormValid: false,
     showPassword: false,
-    registered: false,
+    authSuccess: false,
     snack: false,
     formControls: {
         firstName: {
@@ -118,7 +118,7 @@ const SignUp = (props) => {
             setTimeout(() => {
                 setState({
                     ...initialState,
-                    registered: true
+                    authSuccess: true
                 })
             }, 3000)
         })
@@ -131,7 +131,7 @@ const SignUp = (props) => {
 
     const { firstName, lastName, mail, password } = state.formControls
 
-    if (state.registered) {
+    if (state.authSuccess) {
         return (
             <Redirect to="/"/>
         )
@@ -257,7 +257,7 @@ const SignUp = (props) => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        auth: (email, password, fName, lName) => dispatch(signUp(email, password, fName, lName))
+        auth: (email, password, fName, lName) => dispatch(auth(email, password, fName, lName))
 
     }
 }

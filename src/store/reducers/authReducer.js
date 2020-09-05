@@ -1,8 +1,8 @@
-import { AUTH_SIGNUP_SUCCESS, AUTH_SUCCESS } from "../actions/acionsType"
+import { AUTH_ERROR, AUTH_REGISTER_SUCCESS, AUTH_SUCCESS } from "../actions/acionsType"
 
 const initialState = {
     token: null,
-    role: "user"/*'admin'*/
+    err: null
 }
 
 export default function authReducer(state = initialState, action) {
@@ -12,10 +12,15 @@ export default function authReducer(state = initialState, action) {
                 ...state,
                 token: action.token
             }
-        case AUTH_SIGNUP_SUCCESS:
+        case AUTH_REGISTER_SUCCESS:
             return {
                 ...state,
                 token: action.token
+            }
+        case AUTH_ERROR:
+            return {
+                ...state,
+                error: action.err
             }
 
         default:
