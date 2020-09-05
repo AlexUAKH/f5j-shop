@@ -1,8 +1,9 @@
-import axios from "../../utilites/axias/axias-sh"
-import { AUTH_ERROR, AUTH_LOGOUT, AUTH_REGISTER_SUCCESS, AUTH_SIGNUP_SUCCESS, AUTH_SUCCESS } from "./acionsType"
+import axios from "axios"
+import { AUTH_ERROR, AUTH_LOGOUT, AUTH_REGISTER_SUCCESS, AUTH_START_LOADING, AUTH_SUCCESS } from "./acionsType"
 
 export function auth(email, password, isLogin) {
-    return async dispatch => {
+    return dispatch => {
+        dispatch(startAuth())
         const data = {
             email,
             password,
@@ -14,28 +15,34 @@ export function auth(email, password, isLogin) {
         } else {
             url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDrxMt8bq9uRddROkQQb8jFfDibYjbdgm8"
         }
-        console.log("data", data)
 
-        const res = await axios.post(url, data)
-            .then(() => {
-                    const dt = res.data
-                    const expirationDate = new Date(new Date().getTime() + dt.expiresIn * 1000)
+        axios.post(url, data)
+            .then((res) => {
+                console.log("res: ", res)
+                const dt = res.data
+                const expirationDate = new Date(new Date().getTime() + dt.expiresIn * 1000)
 
-                    localStorage.setItem("token", dt.idToken)
-                    localStorage.setItem("userId", dt.localId)
-                    localStorage.setItem("expirationDate", expirationDate)
+                localStorage.setItem("token", dt.idToken)
+                localStorage.setItem("userId", dt.localId)
+                localStorage.setItem("expirationDate", expirationDate)
 
-                    if (isLogin) {
-                        dispatch(authSuccess(dt.idToken))
-                    } else {
-                        dispatch(registerSuccess(dt.idToken))
-                    }
-                    dispatch(autoLogout(dt.expiresIn))
+                if (isLogin) {
+                    dispatch(authSuccess(dt.idToken))
+                } else {
+                    dispatch(registerSuccess(dt.idToken))
                 }
-            )
-            .catch(e => {
+                dispatch(autoLogout(dt.expiresIn))
+            })
+            .catch((e) => {
                 dispatch(authError(e))
             })
+
+    }
+}
+
+export function startAuth() {
+    return {
+        type: AUTH_START_LOADING
     }
 }
 
@@ -77,6 +84,7 @@ export function authError(err) {
         err
     }
 }
+
 
 export function autoLogin() {
     return dispatch => {

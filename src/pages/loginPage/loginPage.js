@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import CssBaseline from "@material-ui/core/CssBaseline"
@@ -19,6 +19,7 @@ import { Link as RouterLink, Redirect } from "react-router-dom"
 import { auth } from "../../store/actions/auth"
 import { connect } from "react-redux"
 import Snack from "../../components/snackBar"
+import LinearProgress from "@material-ui/core/LinearProgress"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -79,7 +80,11 @@ const initialState = {
 
 const SignIn = (props) => {
     const classes = useStyles()
-    const [state, setState] = useState(initialState)
+    const [state, setState] = useState({
+        ...initialState,
+        error: props.error
+    })
+
     const handleClickShowPassword = () => {
         setState({
             ...state,
@@ -102,100 +107,110 @@ const SignIn = (props) => {
             state.formControls.mail.value,
             state.formControls.password.value,
             isLogin
-        ).then(() => {
+        )
+    }
+    useEffect(() => {
+
+        if (props.token) {
             setState({
-                ...initialState,
-                message: isLogin ? "Login success" : "Registration success",
-                snack: true
+                ...state,
+                snack: true,
+                message: "Request is successful"
             })
             setTimeout(() => {
-                setState({
-                    ...initialState,
-                    authSuccess: true
-                })
+                props.history.push("/")
+                // setState({
+                //     ...state,
+                //     authSuccess: true
             }, 3000)
-        })
-
-    }
+        }
+    }, [props.token])
 
     const { mail } = state.formControls
     const { password } = state.formControls
 
-    if (state.authSuccess) {
-        return (
-            <Redirect to="/"/>
-        )
-    } else if (state.snack) {
-        return (
-            <Snack message={ this.state.message }/>
-        )
-    } else {
-        return (
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <div className={ classes.paper }>
-                    <Avatar className={ classes.avatar }>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <form className={ classes.form } noValidate>
-                        <TextField
-                            error={ !mail.valid && mail.touched }
-                            value={ mail.value }
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label={ mail.label }
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                            className={ classes.valid }
-                            helperText={
-                                (!mail.valid && mail.touched)
-                                    ? mail.errorMessage
-                                    : "" }
-                            onChange={ handleInputChange("mail") }
-                        />
-                        <TextField
-                            variant="outlined"
-                            value={ password.value }
-                            onChange={ handleInputChange("password") }
-                            error={ !password.valid && password.touched }
-                            helperText={
-                                (!password.valid && password.touched)
-                                    ? password.errorMessage
-                                    : "" }
-                            margin="normal"
-                            required
-                            className={ classes.valid }
-                            fullWidth
-                            name="password"
-                            label={ password.label }
-                            type={ state.showPassword ? "text" : "password" }
-                            id="password"
-                            autoComplete="current-password"
-                            InputProps={ {
-                                endAdornment:
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={ handleClickShowPassword }
-                                            onMouseDown={ handleMouseDownPassword }
-                                        >
-                                            { state.showPassword ? <Visibility/> : <VisibilityOff/> }
-                                        </IconButton>
-                                    </InputAdornment>
-                            } }
-                        />
-                        {/*<FormControlLabel*/ }
-                        {/*    control={ <Checkbox value="remember" color="primary"/> }*/ }
-                        {/*    label="Remember me"*/ }
-                        {/*/>*/ }
-                        <Button
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            { state.snack
+                ? <Snack
+                    type
+                    message={ state.message }
+                />
+                : null }
+            { props.error !== "" && props.error !== null
+                ? <Snack
+                    type={ false }
+                    message="Login or password is incorrect"
+                />
+                : null
+            }
+            <div className={ classes.paper }>
+                <Avatar className={ classes.avatar }>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <form className={ classes.form }
+                      onSubmit={ handleMouseDownPassword } noValidate>
+                    <TextField
+                        error={ !mail.valid && mail.touched }
+                        value={ mail.value }
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label={ mail.label }
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        className={ classes.valid }
+                        helperText={
+                            (!mail.valid && mail.touched)
+                                ? mail.errorMessage
+                                : "" }
+                        onChange={ handleInputChange("mail") }
+                    />
+                    <TextField
+                        variant="outlined"
+                        value={ password.value }
+                        onChange={ handleInputChange("password") }
+                        error={ !password.valid && password.touched }
+                        helperText={
+                            (!password.valid && password.touched)
+                                ? password.errorMessage
+                                : "" }
+                        margin="normal"
+                        required
+                        className={ classes.valid }
+                        fullWidth
+                        name="password"
+                        label={ password.label }
+                        type={ state.showPassword ? "text" : "password" }
+                        id="password"
+                        autoComplete="current-password"
+                        InputProps={ {
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={ handleClickShowPassword }
+                                        onMouseDown={ handleMouseDownPassword }
+                                    >
+                                        { state.showPassword ? <Visibility/> : <VisibilityOff/> }
+                                    </IconButton>
+                                </InputAdornment>
+                        } }
+                    />
+                    {/*<FormControlLabel*/ }
+                    {/*    control={ <Checkbox value="remember" color="primary"/> }*/ }
+                    {/*    label="Remember me"*/ }
+                    {/*/>*/ }
+                    { props.loading
+                        ? <LinearProgress/>
+                        : <Button
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -206,10 +221,13 @@ const SignIn = (props) => {
                         >
                             Login
                         </Button>
-                        <Typography component="h4" variant="body2" align="center">
-                            or
-                        </Typography>
-                        <Button
+                    }
+                    <Typography component="h4" variant="body2" align="center">
+                        or
+                    </Typography>
+                    { props.loading
+                        ? <LinearProgress color="secondary"/>
+                        : <Button
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -220,28 +238,37 @@ const SignIn = (props) => {
                         >
                             Register
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                {/*<Link component={ RouterLink } to="" variant="body2">*/ }
-                                {/*    Forgot password?*/ }
-                                {/*</Link>*/ }
-                            </Grid>
-                            <Grid item>
-                                {/*<Link component={RouterLink} to="/sign_up" variant="body2">*/ }
-                                {/*    { "Don't have an account? Sign Up" }*/ }
-                                {/*</Link>*/ }
-                                <Link component={ RouterLink } to="/" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
+                    }
+                    <Grid container>
+                        <Grid item xs>
+                            {/*<Link component={ RouterLink } to="" variant="body2">*/ }
+                            {/*    Forgot password?*/ }
+                            {/*</Link>*/ }
                         </Grid>
-                    </form>
-                </div>
-                <Box mt={ 8 }>
-                    <Copyright/>
-                </Box>
-            </Container>
-        )
+                        <Grid item>
+                            {/*<Link component={RouterLink} to="/sign_up" variant="body2">*/ }
+                            {/*    { "Don't have an account? Sign Up" }*/ }
+                            {/*</Link>*/ }
+                            <Link component={ RouterLink } to="/" variant="body2">
+                                Forgot password?
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+            <Box mt={ 8 }>
+                <Copyright/>
+            </Box>
+        </Container>
+    )
+
+}
+
+function mapStateToProps(state) {
+    return {
+        token: state.auth.token,
+        loading: state.auth.loading,
+        error: state.auth.error
     }
 }
 
@@ -252,4 +279,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(null, mapDispatchToProps)(SignIn)
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)

@@ -9,10 +9,6 @@ import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import thunk from "redux-thunk"
 import Boundary from "./components/boundary"
-import {
-    createMuiTheme,
-    ThemeProvider as MuiThemeProvider
-} from "@material-ui/core/styles"
 import CssBaseline from "@material-ui/core/CssBaseline"
 
 const composeEnhancers =

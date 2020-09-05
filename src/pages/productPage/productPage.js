@@ -3,7 +3,7 @@ import TheCarousel from "../../components/carousel";
 import ButtonsRow from "../../containers/helpers/buttons-row";
 import TheTabs from "../../components/the-tabs";
 import { Typography, Button } from "@material-ui/core";
-import {makeStyles, useTheme} from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 // TODO:MOCK DATA
 const mockTabsProps = {
     description: <p>kldfmklsdgklmksdmsfmlgmlksdgkmklsdfmdsg</p>,
