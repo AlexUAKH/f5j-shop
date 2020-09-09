@@ -15,7 +15,7 @@ import IconButton from "@material-ui/core/IconButton"
 import { Visibility, VisibilityOff } from "@material-ui/icons"
 import { isFormValidCheck, makeNewControl } from "../../form/formFrameWork"
 import Copyright from "../../components/copyright"
-import { Link as RouterLink, Redirect } from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom"
 import { auth } from "../../store/actions/auth"
 import { connect } from "react-redux"
 import Snack from "../../components/snackBar"
@@ -109,26 +109,30 @@ const SignIn = (props) => {
             isLogin
         )
     }
-    useEffect(() => {
 
-        if (props.token) {
-            setState({
-                ...state,
-                snack: true,
-                message: "Request is successful"
-            })
-            setTimeout(() => {
-                props.history.push("/")
-                // setState({
-                //     ...state,
-                //     authSuccess: true
-            }, 3000)
-        }
-    }, [props.token])
+    const finishAndRedirect = (message) => {
+        setState({
+            ...state,
+            snack: true,
+            message
+        })
+        setTimeout(() => {
+            props.history.push("/")
+        }, 3000)
+    }
+
+    // useEffect(() => {
+    //
+    //     if (props.token) {
+    //         finishAndRedirect()
+    //     }
+    // }, [props.token])
 
     const { mail } = state.formControls
     const { password } = state.formControls
-
+    if (props.token) {
+        finishAndRedirect("Already signed in")
+    }
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
@@ -137,7 +141,8 @@ const SignIn = (props) => {
                     type
                     message={ state.message }
                 />
-                : null }
+                : null
+            }
             { props.error !== "" && props.error !== null
                 ? <Snack
                     type={ false }

@@ -4,6 +4,7 @@ import MuiAccordion from "@material-ui/core/Accordion"
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary"
 import MuiAccordionDetails from "@material-ui/core/AccordionDetails"
 import Typography from "@material-ui/core/Typography"
+import AdminCategoriesTable from "../../components/admin-categories-table"
 
 const Accordion = withStyles({
     root: {
@@ -59,13 +60,7 @@ export default function AdminPage() {
                 <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                     <Typography>Categories</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                    <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                        sit amet blandit leo lobortis eget. Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                    </Typography>
-                </AccordionDetails>
+                <AdminCategoriesTable />
             </Accordion>
             <Accordion square expanded={ expanded === "panel2" } onChange={ handleChange("panel2") }>
                 <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
